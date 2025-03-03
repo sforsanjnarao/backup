@@ -3,7 +3,8 @@ const dotenv=require('dotenv')
 
 dotenv.config();
 const config=require('./src/config/config')
-
+const connectDB = require('./src/db/db')
+connectDB()
 
 const port= config.PORT;
 

@@ -18,7 +18,7 @@ const Register = () => {
     setPassword(e.target.value);
   }
 
-  const handleSubmit=async (e)=>{
+  const handleSubmit= async(e)=>{
     e.preventDefault();
     try{
       const response = await axios.post('http://localhost:3000/user/register',{
@@ -26,8 +26,7 @@ const Register = () => {
         email:email,
         password:password,
       })
-      console.log("")
-      console.log({user,email,password});
+      console.log(response.data);
       setEmail('')
       setPassword('')
       setuser('')
@@ -36,14 +35,14 @@ const Register = () => {
     catch(error){
       setError(error.response?.data?.message);
       console.log(error.response?.data?.message);
-      
+
     }
     
   }
    
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form className="bg-white p-8 rounded shadow-md w-full max-w-md">
+      <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
         <div className="mb-4">
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username:</label>
@@ -82,7 +81,7 @@ const Register = () => {
           />
         </div>
         <button
-          onClick={handleSubmit}
+          
           type="submit"
           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
