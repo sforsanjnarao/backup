@@ -6,7 +6,8 @@ module.exports.Register=async (req,res)=>{
     const {username, email, password}=req.body;
     if(!username ||!email ||!password) return res.status(400).json({message:'fill the form'})
        try{
-        const userExists=await userModel.findOne({email})
+        const userExists=userModel.findOne({email:email})
+        console.log(userExists)
         if(userExists) return res.status(200).json({message:'user already exists'});
     
             const hashPassword = await bcrypt.hash(password,10);
@@ -15,7 +16,7 @@ module.exports.Register=async (req,res)=>{
                 email,
                 password:hashPassword
             })
-            const token = await jwt.sign({_id:newUser._id},config.JWT_SECRET)
+            const token = jwt.sign({ _id: newUser._id }, config.JWT_SECRET)
             console.log(newUser, token)
             res.status(200).json({
                 message:"user created successfully",
@@ -37,6 +38,22 @@ module.exports.login=async (req,res)=>{
     const {email,password}=req.body
     if(!email || !password) return res.status(400).json({message:'fill the form'});
 
-    
+   try{
+    const userExists=userModel.findOne({email:email})
+    if(!userExists) return res.status(400).json({message:'Register first'})
+    if(!userExists.password) return res.status(400).json({message:"passwor is required"})
+        const match=await bcrypt.compare(password,userExists.password)
+    if(!match) return res.status(400).json({message:"invalid password"})
+        const token=jwt.sign({id:userExists.id},config.JWT_SECRET)
+    res.status(200).json({
+        message:'you are logged in successfully',
+        user:userExists,
+        token:token
+        
+    })
+   }catch(err){
+    console.error(err)
+    res.status(500).json({message:'server error'})
+   }
 
 }

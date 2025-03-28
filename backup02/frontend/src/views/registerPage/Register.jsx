@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React,{useState} from 'react';
-import ReactDOM from 'react-dom';
 
 const Register = () => {
   const [user, setuser] = useState('');
@@ -21,10 +20,11 @@ const Register = () => {
   const handleSubmit= async(e)=>{
     e.preventDefault();
     try{
+    
       const response = await axios.post('http://localhost:3000/user/register',{
         username:user,
         email:email,
-        password:password,
+        password:password
       })
       console.log(response.data);
       setEmail('')
